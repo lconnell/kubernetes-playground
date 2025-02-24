@@ -1,0 +1,15 @@
+name: Validate Kubernetes YAML
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container: ghcr.io/yannh/kubeconform:latest-alpine
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate raw manifests
+        run: find . -name "*.yaml" -not -name "kustomization.yaml" -not -path "./.github/*" -exec /kubeconform -strict -summary {} +
+
+# kubeconform -strict -summary configs/*.yaml apps/*.yaml
