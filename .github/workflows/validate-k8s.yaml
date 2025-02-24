@@ -10,4 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Validate Kubernetes manifests
-        run: kubeconform -strict -summary *.yaml
+        run: find . -name "*.yaml" -exec kubeconform -strict -summary {} +
+
+# kubeconform -strict -summary configs/*.yaml apps/*.yaml
