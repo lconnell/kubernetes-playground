@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-deployment
+  namespace: default  # Adjust namespace as needed
+  labels:
+    app: webhook
+spec:
+  replicas: 1  # Single replica for simplicity; adjust for HA
+  selector:
+    matchLabels:
+      app: webhook
+  template:
+    metadata:
+      labels:
+        app: webhook  # Must match the Service selector
+    spec:
+      containers:
+      - name: webhook
+        image: your-registry/webhook:latest  # Replace with your actual image URL
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000  # Port exposed by FastAPI app
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"  # Ensures logs are not buffered
+      # Uncomment and configure if pulling from a private registry
+      # imagePullSecrets:
+      # - name: regcred
