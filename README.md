@@ -1,4 +1,11 @@
 # kubernetes-playground
-A playground for learning Kubernetes and GitOps
+A playground for learning Kubernetes, ArgoCD and GitOps
 
-# Test Action
+# GitHub Action
+Todo
+
+# Git Hooks
+Todo
+
+# ArgoCD
+Todo
