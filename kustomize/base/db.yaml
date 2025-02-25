@@ -18,20 +18,25 @@ spec:
         image: postgres:latest
         env:
         - name: POSTGRES_PASSWORD
-          value: "password"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
         volumeMounts:
         - name: data
           mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
   volumeClaimTemplates:
   - metadata:
       name: data
     spec:
       accessModes: ["ReadWriteOnce"]
       resources:
-        limits:
-          cpu: "500m"
-          memory: "512Mi"
         requests:
-          cpu: "200m"
-          memory: "256Mi"
           storage: 1Gi

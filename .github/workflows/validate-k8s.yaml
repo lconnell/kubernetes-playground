@@ -9,7 +9,11 @@ jobs:
     container: ghcr.io/yannh/kubeconform:latest-alpine
     steps:
       - uses: actions/checkout@v3
-      - name: Validate raw manifests
-        run: find . -name "*.yaml" -not -name "kustomization.yaml" -not -path "./.github/*" -exec /kubeconform -strict -summary {} +
-
-# kubeconform -strict -summary configs/*.yaml apps/*.yaml
+      - name: Install Kustomize
+        run: curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && mv kustomize /usr/local/bin/
+      - name: Validate rendered manifests
+        run: |
+          for env in dev prod; do
+            kustomize build kustomize/$env > /tmp/$env.yaml || exit 1
+            /kubeconform -strict -summary /tmp/$env.yaml || exit 1
+          done
