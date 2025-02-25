@@ -9,8 +9,13 @@ jobs:
     container: ghcr.io/yannh/kubeconform:latest-alpine
     steps:
       - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: apk add --no-cache curl bash
       - name: Install Kustomize
-        run: curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && mv kustomize /usr/local/bin/
+        run: |
+          curl -sL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.6.0/kustomize_v5.6.0_linux_amd64.tar.gz" -o kustomize.tar.gz
+          tar -xzf kustomize.tar.gz -C /tmp
+          mv /tmp/kustomize /usr/local/bin/
       - name: Validate rendered manifests
         run: |
           for env in dev prod; do
