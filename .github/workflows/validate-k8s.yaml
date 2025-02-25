@@ -13,8 +13,9 @@ jobs:
         run: apk add --no-cache curl bash
       - name: Install Kustomize
         run: |
-          curl -sL "https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_v5.4.1_linux_amd64.tar.gz" | tar -xz
-          mv kustomize /usr/local/bin/
+          curl -sL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.6.0/kustomize_v5.6.0_linux_amd64.tar.gz" -o kustomize.tar.gz
+          tar -xzf kustomize.tar.gz -C /tmp
+          mv /tmp/kustomize /usr/local/bin/
       - name: Validate rendered manifests
         run: |
           for env in dev prod; do
