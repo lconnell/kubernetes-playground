@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: my-api:latest
+        image: nginx:latest
         env:
         - name: API_KEY
           valueFrom:
