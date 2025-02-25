@@ -6,6 +6,7 @@ resources:
   - api-service.yaml
   - db.yaml
   - db-secret.yaml
+  - db-service.yaml
 configMapGenerator:
   - name: nginx-config
     files:

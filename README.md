@@ -10,8 +10,7 @@ A GitHub Action to validate Kubernetes manifests is triggered when submitting a 
 A Git pre-commit hook to validate Kubernetes manifests is used to prevent invalid manifests from being committed.
 
 # ArgoCD
-ArgoCD is used to manage the deployment of the manifests.
-
+ArgoCD is used to manage the deployment of the manifests. See [README](argocd/README.md) for additional details.
 ``` bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
@@ -28,8 +27,12 @@ The database is a PostgreSQL instance that is configured to use a custom Postgre
 kubectl port-forward svc/database-dev 5432:5432 -n development
 ```
 
+# Admission Controller
+Todo
+
 # Troubleshooting
+Test connectivity to the database from a pod in the development namespace.
 ``` bash
-kubectl run -it --rm busybox -n dev --image=busybox --restart=Never -- nc -zv db-dev 5432
+kubectl run -it --rm busybox -n development --image=busybox --restart=Never -- nc -zv db-dev 5432
 ```
 
