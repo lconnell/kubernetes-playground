@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - api.yaml
   - api-secret.yaml
+  - api-service.yaml
   - db.yaml
   - db-secret.yaml
 configMapGenerator:
