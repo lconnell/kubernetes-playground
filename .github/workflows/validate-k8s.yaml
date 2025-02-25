@@ -10,11 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: |
-          apk add --no-cache curl bash
+        run: apk add --no-cache curl bash
       - name: Install Kustomize
         run: |
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          curl -sL "https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_v5.4.1_linux_amd64.tar.gz" | tar -xz
           mv kustomize /usr/local/bin/
       - name: Validate rendered manifests
         run: |
