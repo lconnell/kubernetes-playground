@@ -15,6 +15,12 @@ spec:
       containers:
       - name: api
         image: my-api:latest
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: key
         resources:
           limits:
             cpu: "500m"
