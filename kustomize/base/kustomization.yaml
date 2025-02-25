@@ -9,4 +9,4 @@ resources:
 configMapGenerator:
   - name: nginx-config
     files:
-      - nginx.conf
+      - config/nginx.conf

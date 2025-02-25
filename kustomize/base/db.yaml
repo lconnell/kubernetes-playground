@@ -32,6 +32,8 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "200m"
+        ports:
+        - containerPort: 5432
   volumeClaimTemplates:
   - metadata:
       name: data
