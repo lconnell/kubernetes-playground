@@ -14,5 +14,7 @@ configMapGenerator:
 labels:
 - includeSelectors: true
   pairs:
-    app.kubernetes.io/part-of: grok
-    owner: lee.a.connell@gmail.com
+    department: engineering
+commonAnnotations:
+  owner: lee.a.connell@gmail.com
+  app.kubernetes.io/part-of: grok
