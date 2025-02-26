@@ -3,3 +3,5 @@ nameReference:
   fieldSpecs:
   - path: spec/template/spec/containers/env/valueFrom/secretKeyRef/name
     kind: StatefulSet
+  - path: spec/template/spec/containers/env/valueFrom/secretKeyRef/name
+    kind: Deployment
