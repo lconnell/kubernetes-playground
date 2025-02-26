@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: api
 spec:
+  revisionHistoryLimit: 2  # Keep only 2 old ReplicaSets
   replicas: 1
   selector:
     matchLabels:
@@ -12,7 +13,6 @@ spec:
       labels:
         app: api
     spec:
-      revisionHistoryLimit: 2  # Keep only 2 old ReplicaSets
       containers:
       - name: api
         image: nginx:latest
