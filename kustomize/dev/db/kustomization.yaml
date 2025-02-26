@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/db/kustomization.yaml
+patches:
+  - target:
+      kind: StatefulSet
+      name: db
+    path: patch-db.yaml
+  - target:
+      kind: Secret
+      name: db-secret
+    path: patch-db-secret.yaml
