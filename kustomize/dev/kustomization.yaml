@@ -5,7 +5,7 @@ resources:
 namespace: development
 nameSuffix: -dev
 labels:
-  - includeSelectors: false
+  - includeSelectors: true
     pairs:
       env: development
 patches:

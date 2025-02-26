@@ -5,7 +5,7 @@ resources:
 namespace: production
 nameSuffix: -prod
 labels:
-  - includeSelectors: false
+  - includeSelectors: true
     pairs:
       env: production
 patches:
