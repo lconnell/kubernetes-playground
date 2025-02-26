@@ -1,16 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - api.yaml
-  - api-secret.yaml
-  - api-service.yaml
-  - db.yaml
-  - db-secret.yaml
-  - db-service.yaml
+- api.yaml
+- api-secret.yaml
+- api-service.yaml
+- db.yaml
+- db-secret.yaml
+- db-service.yaml
 configMapGenerator:
-  - name: nginx-config
-    files:
-      - config/nginx.conf
-commonLabels:
-  owner: lee.a.connell@gmail.com
-  app.kubernetes.io/part-of: grok
+- files:
+  - config/nginx.conf
+  name: nginx-config
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/part-of: grok
+    owner: lee.a.connell@gmail.com
