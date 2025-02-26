@@ -1,13 +1,25 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - api/kustomization.yaml
-  - db/kustomization.yaml
+  - ../base
 namespace: development
 nameSuffix: -dev
 labels:
   - includeSelectors: true
     pairs:
       env: development
+patches:
+  - target:
+      kind: Deployment
+      name: api
+    path: patch-api.yaml
+  - target:
+      kind: StatefulSet
+      name: db
+    path: patch-db.yaml
+  - target:
+      kind: Secret
+      name: db-secret
+    path: patch-db-secret.yaml
 configurations:
   - name-reference.yaml
