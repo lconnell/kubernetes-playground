@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: api
 spec:
+  revisionHistoryLimit: 2  # Keep only 2 old ReplicaSets
   replicas: 1
   selector:
     matchLabels:

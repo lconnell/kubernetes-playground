@@ -3,6 +3,7 @@ kind: StatefulSet
 metadata:
   name: db
 spec:
+  revisionHistoryLimit: 2  # Keep only 2 old ControllerRevisions
   serviceName: db
   replicas: 1
   selector:
