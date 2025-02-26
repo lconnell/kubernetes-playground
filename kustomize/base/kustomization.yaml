@@ -12,7 +12,7 @@ configMapGenerator:
   - config/nginx.conf
   name: nginx-config
 labels:
-- includeSelectors: true
+- includeSelectors: false
   pairs:
     department: engineering
 commonAnnotations:
