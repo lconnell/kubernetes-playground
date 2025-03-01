@@ -8,12 +8,12 @@ spec:
   source:
     repoURL: https://github.com/lconnell/kubernetes-playground.git
     targetRevision: main  # Or test-action if still on that branch
-    path: kustomize
-    directory:
-      include: "dev/kustomization.yaml"
+    path: kustomize/dev
+    # directory:
+    #   include: "dev/kustomization.yaml"
   destination:
     server: https://kubernetes.default.svc  # In-cluster API server
-    namespace: development  # Matches kustomize/dev/ namespace
+    namespace: development
   syncPolicy:
     automated:
       prune: true  # Deletes resources not in Git

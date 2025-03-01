@@ -8,9 +8,9 @@ spec:
   source:
     repoURL: https://github.com/lconnell/kubernetes-playground.git
     targetRevision: main
-    path: kustomize
-    directory:
-      include: "prod/kustomization.yaml"
+    path: kustomize/prod
+    # directory:
+    #   include: "prod/kustomization.yaml"
   destination:
     server: https://kubernetes.default.svc
     namespace: production
