@@ -74,7 +74,7 @@ install_argocd() {
         --set server.metrics.enabled=true \
         --set repoServer.metrics.enabled=true \
         --set dex.enabled=true \
-        --set server.insecure=true
+--set server.insecure=true # WARNING: Only for testing! Do not use in production!
     
     if [ $? -ne 0 ]; then
         echo "Error: Failed to install ArgoCD"
