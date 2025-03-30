@@ -90,7 +90,7 @@ install_flagger() {
 helm repo add flagger https://flagger.app || { echo "Error: Failed to add Flagger Helm repository"; exit 1; }
     
     # Update Helm repositories
-    helm repo update
+helm repo update || { echo "Error: Failed to update Helm repositories"; exit 1; }
     
     # Install Flagger's Canary CRD
     echo "Installing Flagger's Canary CRD..."
