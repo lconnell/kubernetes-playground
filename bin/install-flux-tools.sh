@@ -3,7 +3,7 @@
 # Script to install or uninstall Flux, Flagger, and Headlamp in a Kubernetes cluster
 # Usage: ./install-flux-tools.sh [install|uninstall]
 
-set -e  # Exit immediately if a command exits with a non-zero status
+set -euo pipefail  # Exit immediately if a command exits with a non-zero status
 
 # Function to display usage information
 usage() {
@@ -108,6 +108,7 @@ install_flagger() {
     echo "Deploying Flagger..."
     helm upgrade -i flagger flagger/flagger \
         --namespace=flagger-system \
+        --create-namespace \
         --set crd.create=false \
         --set meshProvider=kubernetes \
         --set metricsServer=http://prometheus.monitoring:9090
@@ -146,6 +147,7 @@ install_headlamp() {
     echo "Deploying Headlamp using Helm..."
     helm upgrade -i headlamp headlamp/headlamp \
         --namespace headlamp \
+        --create-namespace \
         --set replicaCount=1 \
         --set service.type=ClusterIP \
         --set plugins.flux.enabled=true
@@ -222,8 +224,9 @@ uninstall_headlamp() {
 }
 
 # Main script execution
-check_kubectl
-check_helm
+check_kubectl_cli
+check_helm_cli
+check_flux_cli
 
 # Check command line arguments
 if [ $# -ne 1 ]; then
@@ -232,7 +235,6 @@ fi
 
 case "$1" in
     install)
-        check_flux_cli
         install_flux
         install_flagger
         install_headlamp

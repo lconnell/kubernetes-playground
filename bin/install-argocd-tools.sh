@@ -3,7 +3,7 @@
 # Script to install or uninstall ArgoCD in a Kubernetes cluster
 # Usage: ./install-argocd-tools.sh [install|uninstall]
 
-set -e  # Exit immediately if a command exits with a non-zero status
+set -euo pipefail  # Exit immediately if a command exits with a non-zero status
 
 # Function to display usage information
 usage() {
@@ -102,6 +102,7 @@ uninstall_argocd() {
 
 # Main script execution
 check_kubectl_cli
+check_argocd_cli
 
 # Check command line arguments
 if [ $# -ne 1 ]; then
@@ -110,7 +111,6 @@ fi
 
 case "$1" in
     install)
-        check_argocd_cli
         install_argocd
         
         echo ""
