@@ -62,7 +62,7 @@ helm repo add argo https://argoproj.github.io/argo-helm || { echo "Error: Failed
     
     # Update Helm repositories
     echo "Updating Helm repositories..."
-    helm repo update
+helm repo update || { echo "Error: Failed to update Helm repositories"; exit 1; }
     
     # Install ArgoCD using Helm
     echo "Deploying ArgoCD..."
