@@ -125,7 +125,7 @@ install_headlamp() {
 helm repo add headlamp https://headlamp-k8s.github.io/headlamp/ || { echo "Error: Failed to add Headlamp Helm repository"; exit 1; }
     
     # Update Helm repositories
-    helm repo update
+helm repo update || { echo "Error: Failed to update Helm repositories"; exit 1; }
     
     # Install Headlamp using Helm
     echo "Deploying Headlamp using Helm..."
