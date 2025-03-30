@@ -41,21 +41,46 @@ check_argocd_cli() {
     fi
 }
 
+# Function to check if Helm is installed
+check_helm_cli() {
+    if ! command -v helm &> /dev/null; then
+        echo "Error: helm is not installed or not in PATH"
+        echo "Please install Helm: https://helm.sh/docs/intro/install/"
+        exit 1
+    else
+        echo "helm is available: $(helm version 2>/dev/null || echo 'version unknown')"
+    fi
+}
+
 # Function to install ArgoCD
 install_argocd() {
     echo "Installing ArgoCD..."
     
-    # Create namespace if it doesn't exist
-    if ! check_namespace_exists "argocd"; then
-        echo "Creating argocd namespace..."
-        kubectl create namespace argocd
-    else
-        echo "Namespace argocd already exists"
-    fi
+    # Add ArgoCD Helm repository
+    echo "Adding ArgoCD Helm repository..."
+    helm repo add argo https://argoproj.github.io/argo-helm
     
-    # Apply ArgoCD manifests
-    echo "Applying ArgoCD manifests..."
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    # Update Helm repositories
+    echo "Updating Helm repositories..."
+    helm repo update
+    
+    # Install ArgoCD using Helm
+    echo "Deploying ArgoCD..."
+    helm upgrade -i argocd argo/argo-cd \
+        --namespace argocd \
+        --create-namespace \
+        --set server.service.type=ClusterIP \
+        --set controller.metrics.enabled=true \
+        --set server.metrics.enabled=true \
+        --set repoServer.metrics.enabled=true \
+        --set dex.enabled=true \
+        --set server.insecure=true
+    
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to install ArgoCD"
+        echo "Check pod status with: kubectl get pods -n argocd"
+        exit 1
+    fi
     
     # Wait for ArgoCD server pod to be ready
     echo "Waiting for ArgoCD server to be ready (this may take a few minutes)..."
@@ -68,12 +93,12 @@ install_argocd() {
     
     # Get ArgoCD admin password
     echo -n "ArgoCD admin password: "
-    kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
+    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
     
     echo ""
     echo "ArgoCD installed successfully!"
-    echo "To access the ArgoCD UI, run: kubectl port-forward svc/argocd-server -n argocd 8080:443"
-    echo "Then visit: https://localhost:8080 (accept the self-signed certificate)"
+    echo "To access the ArgoCD UI, run: kubectl port-forward svc/argocd-server -n argocd 8080:80"
+    echo "Then visit: http://localhost:8080"
     echo ""
     echo "To login with the ArgoCD CLI:"
     echo "argocd login localhost:8080 --insecure --username admin --password <password>"
@@ -86,9 +111,9 @@ uninstall_argocd() {
     
     # Check if argocd namespace exists
     if check_namespace_exists "argocd"; then
-        # Delete ArgoCD resources
-        echo "Removing ArgoCD manifests..."
-        kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --ignore-not-found
+        # Uninstall ArgoCD
+        echo "Removing ArgoCD..."
+        helm uninstall argocd -n argocd
         
         # Delete the namespace
         echo "Deleting argocd namespace..."
@@ -102,6 +127,7 @@ uninstall_argocd() {
 
 # Main script execution
 check_kubectl_cli
+check_helm_cli
 check_argocd_cli
 
 # Check command line arguments
@@ -112,16 +138,9 @@ fi
 case "$1" in
     install)
         install_argocd
-        
-        echo ""
-        echo "ArgoCD installed successfully!"
-        echo "To access ArgoCD UI: kubectl port-forward svc/argocd-server -n argocd 8080:443"
         ;;
     uninstall)
         uninstall_argocd
-        
-        echo ""
-        echo "ArgoCD uninstalled successfully!"
         ;;
     *)
         echo "Error: Unknown command '$1'"

@@ -96,14 +96,6 @@ install_flagger() {
     echo "Installing Flagger's Canary CRD..."
     kubectl apply -f https://raw.githubusercontent.com/fluxcd/flagger/main/artifacts/flagger/crd.yaml
     
-    # Create flagger namespace if it doesn't exist
-    if ! check_namespace_exists "flagger-system"; then
-        echo "Creating flagger-system namespace..."
-        kubectl create namespace flagger-system
-    else
-        echo "Namespace flagger-system already exists"
-    fi
-    
     # Install Flagger
     echo "Deploying Flagger..."
     helm upgrade -i flagger flagger/flagger \
@@ -127,14 +119,6 @@ install_flagger() {
 # Function to install Headlamp
 install_headlamp() {
     echo "Installing Headlamp..."
-    
-    # Create headlamp namespace if it doesn't exist
-    if ! check_namespace_exists "headlamp"; then
-        echo "Creating headlamp namespace..."
-        kubectl create namespace headlamp
-    else
-        echo "Namespace headlamp already exists"
-    fi
     
     # Add Headlamp Helm repository
     echo "Adding Headlamp Helm repository..."
@@ -238,19 +222,11 @@ case "$1" in
         install_flux
         install_flagger
         install_headlamp
-        
-        echo ""
-        echo "All components installed successfully!"
-        echo "To access Headlamp UI with Flux plugin: kubectl port-forward -n headlamp svc/headlamp 8080:80"
-        echo "Then visit: http://localhost:8080"
         ;;
     uninstall)
         uninstall_headlamp
         uninstall_flagger
         uninstall_flux
-        
-        echo ""
-        echo "All components uninstalled successfully!"
         ;;
     *)
         echo "Error: Unknown command '$1'"
