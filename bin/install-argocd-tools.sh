@@ -58,7 +58,7 @@ install_argocd() {
     
     # Add ArgoCD Helm repository
     echo "Adding ArgoCD Helm repository..."
-    helm repo add argo https://argoproj.github.io/argo-helm
+helm repo add argo https://argoproj.github.io/argo-helm || { echo "Error: Failed to add ArgoCD Helm repository"; exit 1; }
     
     # Update Helm repositories
     echo "Updating Helm repositories..."
