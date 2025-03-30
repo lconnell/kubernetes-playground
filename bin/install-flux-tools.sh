@@ -87,7 +87,7 @@ install_flagger() {
     
     # Add Flagger Helm repository
     echo "Adding Flagger Helm repository..."
-    helm repo add flagger https://flagger.app
+helm repo add flagger https://flagger.app || { echo "Error: Failed to add Flagger Helm repository"; exit 1; }
     
     # Update Helm repositories
     helm repo update
